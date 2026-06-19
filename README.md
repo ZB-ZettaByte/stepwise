@@ -86,6 +86,10 @@ Open an issue on GitHub with:
 - Steps to reproduce, if it is a bug
 - The algorithm or concept you want added, if it is a request
 
-## Credits
+## Inspiration
 
-Stepwise is released under the MIT license.
+This project was inspired by my Data Structures and Algorithms class and my technical interview preparation. While learning topics like sorting, searching, recursion, trees, graphs, and dynamic programming, I realized that reading code alone is not always enough to fully understand how an algorithm works. Many times, the difficult part is not the syntax, but seeing how the data changes at each step and why the algorithm makes certain decisions. I wanted to build something that makes DSA concepts easier to follow by connecting the code, visual steps, variable changes, and explanation together in one place. The goal is to help students and interview candidates understand algorithms, practice with confidence, and build stronger problem-solving skills.
+
+## Author
+
+Built by Sai Rithwik Kukunuri :) Consider leaving a 🌟 if this adds value, and all feedback is very welcome. Feel free to message me on [LinkedIn](https://www.linkedin.com/in/rithwik0801).
