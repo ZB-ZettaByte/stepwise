@@ -1,32 +1,10 @@
 @import 'tailwindcss';
 
-/* Geist Sans — clean UI/display face */
-@font-face {
-  font-family: 'Geist Sans';
-  src:
-    url('/stepwise/fonts/Geist-Variable.woff2') format('woff2'),
-    url('/fonts/Geist-Variable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Geist Mono — variable weight, for the code editor */
-@font-face {
-  font-family: 'Geist Mono';
-  src:
-    url('/stepwise/fonts/GeistMono-Variable.woff2') format('woff2'),
-    url('/fonts/GeistMono-Variable.woff2') format('woff2');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme {
-  --font-sans: 'Geist Sans', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Geist Pixel Square', 'Geist', 'Geist Sans', system-ui, -apple-system, sans-serif;
   --font-mono: 'Geist Mono', ui-monospace, monospace;
-  --font-heading: 'Geist Sans', system-ui, -apple-system, sans-serif;
-  --font-display: 'Geist Sans', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Geist Pixel Circle', 'Geist', 'Geist Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Geist Pixel Circle', 'Geist', 'Geist Sans', system-ui, -apple-system, sans-serif;
 }
 
 :root {
@@ -48,28 +26,99 @@
   --color-danger: #f87171;
 }
 
-body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family:
-    'Geist Sans',
-    system-ui,
-    -apple-system,
-    sans-serif;
-}
+@layer base {
+  /* Geist Sans — clean UI/display face */
+  @font-face {
+    font-family: 'Geist';
+    src:
+      local('Geist'),
+      local('Geist Sans'),
+      url('/fonts/Geist-Variable.woff2') format('woff2'),
+      url('/stepwise/fonts/Geist-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
 
-.font-sans,
-.font-heading,
-.font-display {
-  font-family:
-    'Geist Sans',
-    system-ui,
-    -apple-system,
-    sans-serif;
-}
+  @font-face {
+    font-family: 'Geist Sans';
+    src:
+      local('Geist Sans'),
+      local('Geist'),
+      url('/fonts/Geist-Variable.woff2') format('woff2'),
+      url('/stepwise/fonts/Geist-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
 
-.font-mono {
-  font-family: 'Geist Mono', ui-monospace, monospace;
+  /* Geist Mono — variable weight, for the code editor */
+  @font-face {
+    font-family: 'Geist Mono';
+    src:
+      local('Geist Mono'),
+      url('/fonts/GeistMono-Variable.woff2') format('woff2'),
+      url('/stepwise/fonts/GeistMono-Variable.woff2') format('woff2');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Geist Pixel Square';
+    src:
+      url('/fonts/GeistPixel-Square.woff2') format('woff2'),
+      url('/stepwise/fonts/GeistPixel-Square.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Geist Pixel Circle';
+    src:
+      url('/fonts/GeistPixel-Circle.woff2') format('woff2'),
+      url('/stepwise/fonts/GeistPixel-Circle.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+  }
+
+  html,
+  body,
+  button,
+  input,
+  textarea,
+  select {
+    font-family:
+      'Geist Pixel Square',
+      'Geist',
+      'Geist Sans',
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  body {
+    background: var(--color-bg);
+    color: var(--color-text);
+  }
+
+  .font-sans,
+  .font-heading,
+  .font-display {
+    font-family:
+      'Geist Pixel Circle',
+      'Geist',
+      'Geist Sans',
+      system-ui,
+      -apple-system,
+      sans-serif;
+  }
+
+  .font-mono {
+    font-family: 'Geist Mono', ui-monospace, monospace;
+  }
 }
 
 /* Monaco Editor – active line decoration */
