@@ -5,8 +5,7 @@ import react from '@astrojs/react'
 import sitemap from '@astrojs/sitemap'
 
 export default defineConfig({
-  site: 'https://zb-zettabyte.github.io',
-  base: '/stepwise',
+  site: 'https://zb-zettabyte.github.io/stepwise',
   integrations: [
     react(),
     sitemap({
