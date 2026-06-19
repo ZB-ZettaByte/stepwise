@@ -1,95 +1,37 @@
 # Stepwise — Algorithm Visualizer
 
-Stepwise is an interactive algorithm visualizer for learning Data Structures and Algorithms through step-by-step animations, synced Python code, variable state, and plain-English explanations.
+Stepwise is an interactive algorithm visualizer for learning Data Structures and Algorithms through step-by-step animations, synced Python and C++ code, variable state, and plain-English explanations.
 
-> TODO: Upload a screenshot or hero image of the website here so visitors can quickly see what Stepwise looks like.
+<img src="src/assets/stepwise-preview.png" alt="Stepwise website preview" width="100%">
 
 ## What It Is
 
-Stepwise helps students and self-learners see how algorithms actually move through data. Pick an algorithm, press play, step forward or backward, and watch the visualization, code highlight, variables, and explanation update together.
+Stepwise helps students and self-learners see how algorithms actually move through data. Pick an algorithm, press play, step forward or backward, and watch the visualization, Python/C++ code highlight, variables, and explanation update together.
 
 ## Algorithms Covered
 
-### Concepts
+Stepwise currently includes 45+ algorithms and DSA concepts across core learning categories.
 
-- Big O Notation
-- Worst-case Analysis
-- Recursion
-- Two Pointers
-- Sliding Window
-- Space Complexity
-- Memoization
-- Greedy vs DP
-
-### Data Structures
-
-- Stack
-- Queue
-- Linked List
-- Hash Table
-- Binary Search Tree
-- Heap
-- Union-Find / Disjoint Sets
-- Red-Black Tree
-
-### Sorting
-
-- Bubble Sort
-- Selection Sort
-- Insertion Sort
-- Quick Sort
-- Merge Sort
-- Heap Sort
-- Counting Sort
-- Radix Sort
-- Shell Sort
-- Bucket Sort
-
-### Searching
-
-- Binary Search
-- Linear Search
-- Jump Search
-- Interpolation Search
-- Quickselect / Median Finding
-
-### Graphs
-
-- Breadth-First Search
-- Depth-First Search
-- Dijkstra
-- Prim
-- Kruskal's MST
-- Topological Sort
-
-### Dynamic Programming
-
-- Fibonacci DP
-- Knapsack 0/1
-- Longest Common Subsequence
-
-### Backtracking
-
-- N-Queens Problem
-- Sudoku Solver
-- Maze Pathfinding
-
-### Divide and Conquer
-
-- Tower of Hanoi
-
-### Math
-
-- Sieve of Eratosthenes
+| Category | Algorithms / Concepts |
+|---|---|
+| **Concepts** | Big O Notation, Worst-case Analysis, Recursion, Two Pointers, Sliding Window, Space Complexity, Memoization, Greedy vs DP |
+| **Data Structures** | Stack, Queue, Linked List, Hash Table, Binary Search Tree, Heap, Union-Find / Disjoint Sets, Red-Black Tree |
+| **Sorting** | Bubble Sort, Selection Sort, Insertion Sort, Quick Sort, Merge Sort, Heap Sort, Counting Sort, Radix Sort, Shell Sort, Bucket Sort |
+| **Searching** | Binary Search, Linear Search, Jump Search, Interpolation Search, Quickselect / Median Finding |
+| **Graphs** | Breadth-First Search, Depth-First Search, Dijkstra, Prim, Kruskal's MST, Topological Sort |
+| **Dynamic Programming** | Fibonacci DP, Knapsack 0/1, Longest Common Subsequence |
+| **Backtracking** | N-Queens Problem, Sudoku Solver, Maze Pathfinding |
+| **Divide and Conquer** | Tower of Hanoi |
+| **Math** | Sieve of Eratosthenes |
 
 ## Tech Stack
 
-- Astro
-- TypeScript
-- React
-- Tailwind CSS
-- D3.js
-- Monaco Editor
+![Astro](https://img.shields.io/badge/Astro-000000?style=for-the-badge&logo=astro&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white)
+![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![D3.js](https://img.shields.io/badge/D3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
+![Monaco Editor](https://img.shields.io/badge/Monaco_Editor-007ACC?style=for-the-badge&logo=visualstudiocode&logoColor=white)
 
 ## Run Locally
 
@@ -147,5 +89,3 @@ Open an issue on GitHub with:
 ## Credits
 
 Stepwise is released under the MIT license.
-
-Credits to the original `alg0.dev` project by Najmul H. Bappy, which inspired the foundation for this visual algorithm learning experience.
