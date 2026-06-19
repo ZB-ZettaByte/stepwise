@@ -97,6 +97,7 @@ export default function AlgorithmShowcase({
               setAlgoIdx((i) => (i + 1) % items.length)
               setStepIdx(0)
               setFading(false)
+              pausingRef.current = false
             }, FADE_MS)
             timersRef.current.push(t2)
           }, END_PAUSE_MS)
@@ -156,13 +157,13 @@ export default function AlgorithmShowcase({
     >
       {/* Visualization area */}
       <div
-        className={`relative w-full max-w-2xl transition-colors duration-300 ${
+        className={`relative w-full transition-colors duration-300 ${
           isLanding
-            ? 'overflow-visible'
-            : 'overflow-hidden rounded-xl border border-slate-200 bg-white group hover:border-amber-400 md:rounded-2xl'
+            ? 'max-w-[840px] overflow-visible'
+            : 'max-w-2xl overflow-hidden rounded-xl border border-slate-200 bg-white group hover:border-amber-400 md:rounded-2xl'
         }`}
         style={{
-          height: isLanding ? 'clamp(320px, 34vw, 430px)' : 'clamp(240px, 45vw, 360px)',
+          height: isLanding ? 'clamp(400px, 36vw, 540px)' : 'clamp(240px, 45vw, 360px)',
         }}
       >
         {/* Visualization content */}

@@ -129,7 +129,7 @@ export default function GraphVisualizer({ step, locale = 'en', accent }: GraphVi
                     }
                     fontSize="9"
                     fontWeight="600"
-                    fontFamily="Inter, system-ui, sans-serif"
+                    fontFamily="Geist Sans, system-ui, sans-serif"
                   >
                     {edge.weight}
                   </text>
@@ -200,7 +200,7 @@ export default function GraphVisualizer({ step, locale = 'en', accent }: GraphVi
                 fill={isCurrent ? '#ffffff' : '#ffffff'}
                 fontSize="13"
                 fontWeight="600"
-                fontFamily="Inter, system-ui, sans-serif"
+                fontFamily="Geist Sans, system-ui, sans-serif"
                 style={{ transition: 'fill 0.3s ease' }}
               >
                 {node.label}

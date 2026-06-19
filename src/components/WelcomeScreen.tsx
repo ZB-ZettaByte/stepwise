@@ -33,7 +33,7 @@ const FALLBACK_ICON = 'M3.75 3.75h16.5v16.5H3.75z'
 const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)'
 
 const WELCOME_DESCRIPTION = [
-  "Learning algorithms is hard. Watching them run makes it easier. Step through every data structure and algorithm with real Python and C++ code, whether you're in a DSA class or prepping for interviews."
+  "Learning algorithms is hard. Watching them run makes it easier. Step through every data structure and algorithm with real Python and C++ code, whether you're in a DSA class or prepping for interviews.",
 ]
 
 const RESOURCES = [
@@ -62,7 +62,7 @@ const RESOURCES = [
 function CategoryIcon({ name }: { name: string }) {
   return (
     <svg
-      className="h-5 w-5"
+      className="h-6 w-6"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
@@ -95,14 +95,14 @@ export default function WelcomeScreen({ t, locale = 'en', onSelectAlgorithm }: W
       : `${algorithms.length} algorithms across ${categories.length} categories`
 
   return (
-    <div className="mx-auto w-full max-w-4xl">
+    <div className="mx-auto w-full max-w-6xl py-4 md:py-6">
       {/* Header */}
-      <div className="mb-5 md:mb-6">
-        <h1 className="font-heading text-xl font-semibold text-slate-950 md:text-2xl">
+      <div className="mb-8 md:mb-10">
+        <h1 className="font-heading text-3xl font-semibold text-slate-950 md:text-5xl">
           {t.welcomeTitle}
         </h1>
-        <p className="mt-3 text-sm text-slate-500">{subtitle}</p>
-        <div className="mt-2 max-w-2xl space-y-1 text-base leading-relaxed text-slate-700 font-medium">
+        <p className="mt-4 text-lg text-slate-500 md:text-xl">{subtitle}</p>
+        <div className="mt-4 max-w-4xl space-y-1 text-xl leading-relaxed text-slate-700 md:text-2xl">
           {WELCOME_DESCRIPTION.map((line) => (
             <p key={line}>{line}</p>
           ))}
@@ -110,9 +110,9 @@ export default function WelcomeScreen({ t, locale = 'en', onSelectAlgorithm }: W
       </div>
 
       {/* Search */}
-      <div className="relative mb-6 md:mb-8">
+      <div className="relative mb-8 md:mb-10">
         <svg
-          className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
+          className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -129,41 +129,53 @@ export default function WelcomeScreen({ t, locale = 'en', onSelectAlgorithm }: W
           onChange={(e) => setQuery(e.target.value)}
           placeholder={t.searchPlaceholder}
           aria-label={t.searchPlaceholder}
-          className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-900 outline-none transition-colors duration-150 placeholder:text-slate-400 focus:border-amber-400"
+          className="w-full rounded-2xl border border-slate-200 bg-white py-5 pl-14 pr-5 text-xl text-slate-900 outline-none transition-colors duration-150 placeholder:text-slate-400 focus:border-amber-400"
           style={{ transitionTimingFunction: EASE_OUT }}
         />
       </div>
 
       {q ? (
         matches.length > 0 ? (
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {matches.map((algo) => (
               <button
                 key={algo.id}
                 onClick={() => onSelectAlgorithm?.(algo)}
-                className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 bg-white px-4 py-3 text-left transition-colors duration-200 hover:border-amber-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-400"
+                className="flex items-center justify-between gap-4 rounded-xl border border-slate-200 bg-white px-5 py-4 text-left transition-colors duration-200 hover:border-amber-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-400"
                 style={{ transitionTimingFunction: EASE_OUT }}
               >
-                <span className="truncate text-sm text-slate-900">{algo.name}</span>
-                <span className="shrink-0 text-[11px] text-slate-500">
+                <span className="truncate text-lg text-slate-900">{algo.name}</span>
+                <span className="shrink-0 text-sm text-slate-500">
                   {getCategoryName(locale, algo.category)}
                 </span>
               </button>
             ))}
           </div>
         ) : (
-          <p className="py-16 text-center text-sm text-slate-500">
+          <p className="py-20 text-center text-lg text-slate-500">
             {locale === 'es' ? `Sin resultados para "${query}"` : `No results for "${query}"`}
           </p>
         )
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-600">
+                Explore
+              </p>
+              <h2 className="mt-2 font-heading text-2xl font-semibold text-slate-950 md:text-3xl">
+                Pick a path and start stepping
+              </h2>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
             {categories.map((cat) => {
               const count = cat.algorithms.length
               const first = cat.algorithms[0]
               const name = getCategoryName(locale, cat.name)
               const countText = t.algorithmsCount.replace('{count}', String(count))
+              const preview = first?.name ?? countText
 
               return (
                 <button
@@ -171,26 +183,33 @@ export default function WelcomeScreen({ t, locale = 'en', onSelectAlgorithm }: W
                   onClick={() => first && onSelectAlgorithm?.(first)}
                   disabled={!first}
                   aria-label={`${name}, ${countText}`}
-                  className="group flex flex-col items-start gap-3 rounded-xl border border-slate-200 bg-white p-4 text-left transition-colors duration-200 hover:border-amber-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-400 disabled:pointer-events-none disabled:opacity-40"
+                  className="group flex min-h-36 items-center gap-5 rounded-2xl border border-slate-200 bg-white p-6 text-left transition-colors duration-200 hover:border-amber-400 hover:bg-amber-50/40 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-400 disabled:pointer-events-none disabled:opacity-40"
                   style={{ transitionTimingFunction: EASE_OUT }}
                 >
-                  <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-50 text-amber-600 ring-1 ring-inset ring-amber-200 transition-colors duration-200">
+                  <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-600 ring-1 ring-inset ring-amber-200 transition-colors duration-200 group-hover:bg-amber-100">
                     <CategoryIcon name={cat.name} />
                   </span>
-                  <div>
-                    <h2 className="font-heading text-sm font-semibold text-slate-950">{name}</h2>
-                    <p className="mt-0.5 text-xs text-slate-500">{countText}</p>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-3">
+                      <h3 className="font-heading text-xl font-semibold text-slate-950 md:text-2xl">
+                        {name}
+                      </h3>
+                      <span className="rounded-full bg-amber-100 px-2.5 py-1 text-sm font-medium text-amber-700">
+                        {count}
+                      </span>
+                    </div>
+                    <p className="mt-2 text-base text-slate-500">{preview}</p>
                   </div>
                 </button>
               )
             })}
           </div>
 
-          <section className="mt-10">
-            <h2 className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+          <section className="mt-12">
+            <h2 className="text-sm font-semibold uppercase tracking-[0.2em] text-slate-500">
               Further Reading
             </h2>
-            <ul className="mt-3 space-y-1.5 text-sm text-slate-500">
+            <ul className="mt-4 flex flex-wrap gap-x-5 gap-y-2 text-base text-slate-500">
               {RESOURCES.map((resource) => (
                 <li key={resource.href}>
                   <a

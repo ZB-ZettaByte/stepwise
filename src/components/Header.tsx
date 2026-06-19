@@ -27,12 +27,18 @@ interface HeaderProps {
   onToggleMobileCodePanel?: () => void
 }
 
+const BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+function withBase(path: string) {
+  return `${BASE_PATH}${path}`
+}
+
 function getLocaleUrl(targetLocale: Locale, algorithmId?: string) {
   if (targetLocale === 'en') {
-    return algorithmId ? `/${algorithmId}` : '/'
+    return withBase(algorithmId ? `/${algorithmId}` : '/')
   }
 
-  return algorithmId ? `/${targetLocale}/${algorithmId}` : `/${targetLocale}/`
+  return withBase(algorithmId ? `/${targetLocale}/${algorithmId}` : `/${targetLocale}/`)
 }
 
 export default function Header({
@@ -58,7 +64,7 @@ export default function Header({
 }: HeaderProps) {
   return (
     <header
-      className="h-12 shrink-0 flex items-center justify-between px-3 md:px-5 border-b border-slate-200 bg-white z-10"
+      className="h-16 shrink-0 flex items-center justify-between px-4 md:px-7 border-b border-slate-200 bg-white z-10"
       role="banner"
     >
       {/* Left: Logo + Breadcrumb */}
@@ -66,11 +72,11 @@ export default function Header({
         {isMobile ? (
           <button
             onClick={onToggleMobileSidebar}
-            className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950 shrink-0"
+            className="flex items-center justify-center w-9 h-9 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950 shrink-0"
             aria-label={t.openMenu}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -87,7 +93,7 @@ export default function Header({
         ) : sidebarCollapsed ? (
           <button
             onClick={onExpandSidebar}
-            className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
+            className="flex items-center justify-center w-9 h-9 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
             aria-label={t.expandSidebar}
           >
             <svg
@@ -107,11 +113,11 @@ export default function Header({
           </button>
         ) : null}
         <a
-          href={getLocaleUrl(locale)}
+          href={withBase('/app')}
           className="flex items-center gap-2 md:gap-2.5 hover:opacity-80 transition-opacity min-w-0"
-          aria-label="Stepwise — Home"
+          aria-label="Stepwise — App home"
         >
-          <span className="font-semibold text-sm tracking-tight text-slate-950 font-heading">
+          <span className="font-semibold text-lg tracking-tight text-slate-950 font-heading">
             Stepwise
           </span>
         </a>
@@ -121,11 +127,11 @@ export default function Header({
             className="flex items-center gap-1.5 min-w-0 overflow-hidden"
           >
             <span className="text-slate-300 shrink-0">/</span>
-            <span className="text-xs text-slate-500 hidden md:inline shrink-0">
+            <span className="text-sm text-slate-500 hidden md:inline shrink-0">
               {getCategoryName(locale, selectedAlgorithm.category)}
             </span>
             <span className="text-slate-300 hidden md:inline shrink-0">/</span>
-            <span className="text-xs font-medium text-slate-800 truncate" aria-current="page">
+            <span className="text-sm font-medium text-slate-800 truncate" aria-current="page">
               {selectedAlgorithm.name}
             </span>
           </nav>
@@ -156,11 +162,11 @@ export default function Header({
         {isMobile && selectedAlgorithm && (
           <button
             onClick={onToggleMobileCodePanel}
-            className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
+            className="flex items-center justify-center w-9 h-9 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
             aria-label={t.viewCode}
           >
             <svg
-              className="w-4 h-4"
+              className="w-5 h-5"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -178,7 +184,7 @@ export default function Header({
         {!isMobile && codePanelCollapsed && (
           <button
             onClick={onExpandCodePanel}
-            className="flex items-center justify-center w-7 h-7 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
+            className="flex items-center justify-center w-9 h-9 rounded-md hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-950"
             aria-label={t.expandCodePanel}
           >
             <svg
@@ -205,7 +211,7 @@ export default function Header({
             <a
               key={l}
               href={getLocaleUrl(l, selectedAlgorithm?.id)}
-              className={`px-2 md:px-2.5 py-1 text-[11px] font-medium rounded-md transition-all ${
+              className={`px-3 md:px-3.5 py-1.5 text-sm font-medium rounded-md transition-all ${
                 l === locale
                   ? 'bg-white text-slate-950 shadow-sm'
                   : 'text-slate-500 hover:text-slate-950 hover:bg-slate-200'

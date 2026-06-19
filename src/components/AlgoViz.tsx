@@ -24,17 +24,26 @@ import ConceptVisualizer from '@components/ConceptVisualizer'
 import CodePanel from '@components/CodePanel'
 import type { Algorithm } from '@lib/types'
 
-const SIDEBAR_MAX = 260
-const CODEPANEL_MAX = 420
+const SIDEBAR_MAX = 320
+const CODEPANEL_MAX = 480
 const COLLAPSE_THRESHOLD = 100
 const MOBILE_BREAKPOINT = 768
+const BASE_PATH = import.meta.env.BASE_URL.replace(/\/$/, '')
+
+function withBase(path: string) {
+  return `${BASE_PATH}${path}`
+}
 
 function getAlgorithmUrl(locale: string, algoId: string): string {
-  return locale === defaultLocale ? `/${algoId}` : `/${locale}/${algoId}`
+  return withBase(locale === defaultLocale ? `/${algoId}` : `/${locale}/${algoId}`)
 }
 
 function getAlgorithmIdFromPath(pathname: string): string | null {
-  const cleaned = pathname.replace(/\/$/, '')
+  let cleaned = pathname.replace(/\/$/, '')
+  if (BASE_PATH && cleaned === BASE_PATH) return null
+  if (BASE_PATH && cleaned.startsWith(`${BASE_PATH}/`)) {
+    cleaned = cleaned.slice(BASE_PATH.length)
+  }
   if (cleaned === '') return null
   for (const locale of locales) {
     if (cleaned === `/${locale}`) return null
@@ -354,7 +363,7 @@ export default function AlgoViz({ locale = 'en', initialAlgorithmId }: AlgoVizPr
               {selectedAlgorithm.name} — {getCategoryName(locale, selectedAlgorithm.category)}
             </h1>
           )}
-          <div className="flex-1 flex flex-col p-4 md:p-8 overflow-auto bg-white">
+          <div className="flex-1 flex flex-col p-5 md:p-10 overflow-auto bg-white">
             {selectedAlgorithm?.acceptsCustomArray && (
               <ArrayInput
                 key={selectedAlgorithm.id}
@@ -377,9 +386,9 @@ export default function AlgoViz({ locale = 'en', initialAlgorithmId }: AlgoVizPr
           </div>
 
           {/* Step description */}
-          <div className="px-4 pb-3 md:px-8 md:pb-5" aria-live="polite" aria-atomic="true">
+          <div className="px-5 pb-4 md:px-10 md:pb-6" aria-live="polite" aria-atomic="true">
             {currentStepData?.description && (
-              <div className="text-xs md:text-sm text-slate-700 bg-slate-50 rounded-lg px-3 py-2 md:px-5 md:py-3 border border-slate-200">
+              <div className="text-sm md:text-base text-slate-700 bg-slate-50 rounded-lg px-4 py-3 md:px-6 md:py-4 border border-slate-200">
                 <span className="text-amber-600 font-medium mr-2">
                   {t.step.replace('{n}', String(currentStep + 1))}
                 </span>

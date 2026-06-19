@@ -8,11 +8,18 @@ import { d } from '@lib/algorithms/shared'
 
 const BIG_O_CURVES: Omit<BigOCurve, 'visible' | 'highlighted'>[] = [
   { name: 'O(1)', color: '#0d9488' },
+  { name: 'O(log log n)', color: '#14b8a6' },
   { name: 'O(log n)', color: '#0891b2' },
+  { name: 'O(√n)', color: '#0284c7' },
   { name: 'O(n)', color: '#0369a1' },
+  { name: 'O(n log log n)', color: '#6d28d9' },
   { name: 'O(n log n)', color: '#7c3aed' },
   { name: 'O(n²)', color: '#e11d48' },
+  { name: 'O(2^n)', color: '#fb7185' },
+  { name: 'O(n!)', color: '#dc2626' },
 ]
+
+const CORE_BIG_O_NAMES = ['O(1)', 'O(log n)', 'O(n)', 'O(n log n)', 'O(n²)']
 
 function makeCurves(visibleNames: string[], highlightedName?: string): BigOCurve[] {
   return BIG_O_CURVES.map((c) => ({
@@ -32,21 +39,13 @@ export const bigONotation: Algorithm = {
 def get_first(arr):
     return arr[0]
 
-# O(n) — Linear time
-def find_max(arr):
-    max_value = arr[0]
-    for i in range(1, len(arr)):
-        if arr[i] > max_value:
-            max_value = arr[i]
-    return max_value
-
-# O(n²) — Quadratic time
-def has_duplicate(arr):
-    for i in range(len(arr)):
-        for j in range(i + 1, len(arr)):
-            if arr[i] == arr[j]:
-                return True
-    return False
+# O(log log n) — Double logarithmic time
+def repeated_square_root(n):
+    steps = 0
+    while n > 2:
+        n = n ** 0.5
+        steps += 1
+    return steps
 
 # O(log n) — Logarithmic time
 def binary_search(arr, target):
@@ -61,6 +60,41 @@ def binary_search(arr, target):
         else:
             hi = mid - 1
     return -1
+
+# O(√n) — Square root time
+def jump_search(arr, target):
+    n = len(arr)
+    step = int(n ** 0.5)
+    prev = 0
+
+    while prev < n and arr[min(step, n) - 1] < target:
+        prev = step
+        step += int(n ** 0.5)
+
+    for i in range(prev, min(step, n)):
+        if arr[i] == target:
+            return i
+    return -1
+
+# O(n) — Linear time
+def find_max(arr):
+    max_value = arr[0]
+    for i in range(1, len(arr)):
+        if arr[i] > max_value:
+            max_value = arr[i]
+    return max_value
+
+# O(n log log n) — Near-linear time
+def sieve(limit):
+    is_prime = [True] * (limit + 1)
+    is_prime[0] = is_prime[1] = False
+    p = 2
+    while p * p <= limit:
+        if is_prime[p]:
+            for multiple in range(p * p, limit + 1, p):
+                is_prime[multiple] = False
+        p += 1
+    return [i for i in range(limit + 1) if is_prime[i]]
 
 # O(n log n) — Linearithmic time
 def merge_sort(arr):
@@ -79,19 +113,49 @@ def merge(left, right):
             result.append(left.pop(0))
         else:
             result.append(right.pop(0))
-    return result + left + right`,
+    return result + left + right
+
+# O(n²) — Quadratic time
+def has_duplicate(arr):
+    for i in range(len(arr)):
+        for j in range(i + 1, len(arr)):
+            if arr[i] == arr[j]:
+                return True
+    return False
+
+# O(2^n) — Exponential time
+def subsets(arr):
+    if not arr:
+        return [[]]
+    rest = subsets(arr[1:])
+    return rest + [[arr[0]] + subset for subset in rest]
+
+# O(n!) — Factorial time
+def permutations(arr):
+    if len(arr) <= 1:
+        return [arr]
+
+    result = []
+    for i in range(len(arr)):
+        remaining = arr[:i] + arr[i + 1:]
+        for perm in permutations(remaining):
+            result.append([arr[i]] + perm)
+    return result`,
   description: `Big O Notation
 
 Big O Notation describes how an algorithm's running time or space grows relative to the input size. It focuses on the worst-case scenario and ignores constants.
 
 Common complexities (from fastest to slowest):
-  O(1)      — Constant: independent of input size
-  O(log n)  — Logarithmic: halves the problem each step
-  O(n)      — Linear: visits each element once
-  O(n log n)— Linearithmic: typical of efficient sorting
-  O(n²)     — Quadratic: nested loops over input
-  O(2^n)    — Exponential: doubles with each element
-  O(n!)     — Factorial: all permutations
+  O(1)           — Constant: independent of input size
+  O(log log n)   — Double logarithmic: extremely slow growth
+  O(log n)       — Logarithmic: halves the problem each step
+  O(√n)          — Square root: checks blocks of the input
+  O(n)           — Linear: visits each element once
+  O(n log log n) — Near-linear: appears in algorithms like Sieve of Eratosthenes
+  O(n log n)     — Linearithmic: typical of efficient sorting
+  O(n²)          — Quadratic: nested loops over input
+  O(2^n)         — Exponential: doubles with each new element
+  O(n!)          — Factorial: all permutations
 
 The chart shows how each complexity's curve grows as the input size increases.`,
   cppCode: getCppCode('big-o-notation'),
@@ -102,6 +166,7 @@ The chart shows how each complexity's curve grows as the input size increases.`,
 
     // Helper: visible curves up to a certain name
     const upTo = (name: string) => all.slice(0, all.indexOf(name) + 1)
+    const throughQuadratic = upTo('O(n²)')
 
     // Code line references (1-indexed within the code string):
     //  1: // O(1) — Constant time          15: // O(n²) — Quadratic time
@@ -138,6 +203,18 @@ The chart shows how each complexity's curve grows as the input size increases.`,
       variables: { complexity: 'O(1)', 'ops(1)': 1, 'ops(5)': 1, 'ops(10)': 1 },
     })
 
+    // ── O(log log n) — tiny growth even at large input sizes ──
+    steps.push({
+      concept: { type: 'bigO', curves: makeCurves(upTo('O(log log n)'), 'O(log log n)'), maxN: 64 },
+      description: d(
+        locale,
+        'O(log log n) — Double-logarithmic time. It grows even slower than O(log n), showing up in a few specialized data structures and number-theory routines.',
+        'O(log log n) — Tiempo doble logarítmico. Crece incluso más lento que O(log n), y aparece en algunas estructuras de datos y rutinas de teoría de números especializadas.',
+      ),
+      codeLine: 6,
+      variables: { complexity: 'O(log log n)', 'ops(16)': 2, 'ops(64)': '~2.6' },
+    })
+
     // ── O(log n) — grow from small n to large ──
     steps.push({
       concept: { type: 'bigO', curves: makeCurves(upTo('O(log n)'), 'O(log n)'), maxN: 4 },
@@ -161,6 +238,18 @@ The chart shows how each complexity's curve grows as the input size increases.`,
       variables: { complexity: 'O(log n)', 'ops(4)': 2, 'ops(10)': '3.3' },
     })
 
+    // ── O(√n) — block-based scanning ──
+    steps.push({
+      concept: { type: 'bigO', curves: makeCurves(upTo('O(√n)'), 'O(√n)'), maxN: 16 },
+      description: d(
+        locale,
+        'O(√n) — Square-root time. Algorithms like Jump Search skip ahead by blocks, then scan inside one block.',
+        'O(√n) — Tiempo raíz cuadrada. Algoritmos como Jump Search saltan por bloques y luego escanean dentro de un bloque.',
+      ),
+      codeLine: 22,
+      variables: { complexity: 'O(√n)', 'ops(16)': 4 },
+    })
+
     // ── O(n) — grow from small to large ──
     steps.push({
       concept: { type: 'bigO', curves: makeCurves(upTo('O(n)'), 'O(n)'), maxN: 4 },
@@ -182,6 +271,22 @@ The chart shows how each complexity's curve grows as the input size increases.`,
       ),
       codeLine: 8,
       variables: { complexity: 'O(n)', 'ops(4)': 4, 'ops(10)': 10 },
+    })
+
+    // ── O(n log log n) — near-linear growth ──
+    steps.push({
+      concept: {
+        type: 'bigO',
+        curves: makeCurves(upTo('O(n log log n)'), 'O(n log log n)'),
+        maxN: 30,
+      },
+      description: d(
+        locale,
+        'O(n log log n) — Near-linear. It grows slightly faster than O(n), common in number-theory algorithms like the Sieve.',
+        'O(n log log n) — Casi lineal. Crece un poco más rápido que O(n), común en algoritmos de teoría de números como la criba.',
+      ),
+      codeLine: 36,
+      variables: { complexity: 'O(n log log n)', 'ops(30)': '~62' },
     })
 
     // ── O(n log n) — grow from small to large ──
@@ -210,7 +315,7 @@ The chart shows how each complexity's curve grows as the input size increases.`,
 
     // ── O(n²) — grow from small to large (most dramatic) ──
     steps.push({
-      concept: { type: 'bigO', curves: makeCurves(all, 'O(n²)'), maxN: 4 },
+      concept: { type: 'bigO', curves: makeCurves(throughQuadratic, 'O(n²)'), maxN: 4 },
       description: d(
         locale,
         "O(n²) — Quadratic time. At n=4 it's already 16 operations. Nested loops. Watch it explode...",
@@ -221,7 +326,7 @@ The chart shows how each complexity's curve grows as the input size increases.`,
     })
 
     steps.push({
-      concept: { type: 'bigO', curves: makeCurves(all, 'O(n²)'), maxN: 7 },
+      concept: { type: 'bigO', curves: makeCurves(throughQuadratic, 'O(n²)'), maxN: 7 },
       description: d(
         locale,
         'O(n²) at n=7: 49 operations — already double O(n log n). The curve is pulling away fast...',
@@ -232,7 +337,7 @@ The chart shows how each complexity's curve grows as the input size increases.`,
     })
 
     steps.push({
-      concept: { type: 'bigO', curves: makeCurves(all, 'O(n²)'), maxN: 10 },
+      concept: { type: 'bigO', curves: makeCurves(throughQuadratic, 'O(n²)'), maxN: 10 },
       description: d(
         locale,
         'O(n²) at n=10: 100 operations! Three times more than O(n log n). Bubble Sort lives here.',
@@ -242,27 +347,55 @@ The chart shows how each complexity's curve grows as the input size increases.`,
       variables: { complexity: 'O(n²)', 'ops(10)': 100, 'vs O(n log n)': '33 → 100' },
     })
 
-    // ── Compare all — zoom out progressively ──
+    // ── O(2^n) — exponential explosion ──
     steps.push({
-      concept: { type: 'bigO', curves: makeCurves(all), maxN: 25 },
+      concept: { type: 'bigO', curves: makeCurves(upTo('O(2^n)'), 'O(2^n)'), maxN: 12 },
       description: d(
         locale,
-        'Zooming out to n=25. The gap becomes dramatic: O(n²)=625 while O(n)=25. Quadratic is 25× worse!',
-        'Ampliando a n=25. La brecha se vuelve dramática: O(n²)=625 mientras O(n)=25. ¡Cuadrático es 25× peor!',
+        'O(2^n) — Exponential time. Each extra element can double the work; brute-force subsets live here.',
+        'O(2^n) — Tiempo exponencial. Cada elemento extra puede duplicar el trabajo; aquí viven los subconjuntos por fuerza bruta.',
+      ),
+      codeLine: 1,
+      variables: { complexity: 'O(2^n)', 'ops(10)': 1024, 'ops(12)': 4096 },
+    })
+
+    // ── O(n!) — permutations ──
+    steps.push({
+      concept: {
+        type: 'bigO',
+        curves: makeCurves(['O(n²)', 'O(2^n)', 'O(n!)'], 'O(n!)'),
+        maxN: 10,
+      },
+      description: d(
+        locale,
+        'O(n!) — Factorial time. Trying every permutation explodes fastest: even n=10 means 3,628,800 arrangements.',
+        'O(n!) — Tiempo factorial. Probar cada permutación explota más rápido: incluso n=10 significa 3,628,800 arreglos.',
+      ),
+      codeLine: 1,
+      variables: { complexity: 'O(n!)', 'ops(8)': 40320, 'ops(10)': 3628800 },
+    })
+
+    // ── Compare all — zoom out progressively ──
+    steps.push({
+      concept: { type: 'bigO', curves: makeCurves(CORE_BIG_O_NAMES), maxN: 25 },
+      description: d(
+        locale,
+        'Core comparison at n=25. This keeps the practical curves readable: O(n²)=625 while O(n)=25.',
+        'Comparación principal en n=25. Esto mantiene legibles las curvas prácticas: O(n²)=625 mientras O(n)=25.',
       ),
       codeLine: 1,
       variables: { n: 25, 'O(1)': 1, 'O(n)': 25, 'O(n²)': 625 },
     })
 
     steps.push({
-      concept: { type: 'bigO', curves: makeCurves(all), maxN: 50 },
+      concept: { type: 'bigO', curves: makeCurves(['O(n²)', 'O(2^n)', 'O(n!)']), maxN: 12 },
       description: d(
         locale,
-        'At n=50: O(1)=1, O(n)=50, O(n²)=2500. Choosing the right algorithm matters enormously as data grows!',
-        'Con n=50: O(1)=1, O(n)=50, O(n²)=2500. ¡Elegir el algoritmo correcto importa enormemente conforme crecen los datos!',
+        'Explosive comparison at n=12. Exponential and factorial growth are shown separately so they do not flatten the practical curves.',
+        'Comparación explosiva en n=12. El crecimiento exponencial y factorial se muestran por separado para no aplastar las curvas prácticas.',
       ),
       codeLine: 1,
-      variables: { n: 50, 'O(1)': 1, 'O(n)': 50, 'O(n²)': 2500 },
+      variables: { n: 12, 'O(n²)': 144, 'O(2^n)': 4096, 'O(n!)': 479001600 },
     })
 
     return steps

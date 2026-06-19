@@ -31,11 +31,11 @@ export default function Controls({
 }: ControlsProps) {
   const t = translations[locale]
   const btnClass =
-    'p-1.5 rounded-md hover:bg-slate-100 disabled:opacity-20 disabled:hover:bg-transparent transition-all text-slate-500 hover:text-slate-950 active:scale-95'
+    'p-2 rounded-md hover:bg-slate-100 disabled:opacity-20 disabled:hover:bg-transparent transition-all text-slate-500 hover:text-slate-950 active:scale-95'
 
   return (
     <div
-      className="flex items-center gap-3 lg:gap-5 min-w-0"
+      className="flex items-center gap-4 lg:gap-6 min-w-0"
       role="toolbar"
       aria-label={t.controlsLabel}
     >
@@ -48,7 +48,7 @@ export default function Controls({
           className={btnClass}
           aria-label={t.stepBackward}
         >
-          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path
               fillRule="evenodd"
               clipRule="evenodd"
@@ -65,8 +65,8 @@ export default function Controls({
               key={`${currentStep}-${speed}`}
               className="absolute top-1/2 left-1/2 pointer-events-none"
               style={{
-                width: '38px',
-                height: '38px',
+                width: '48px',
+                height: '48px',
                 transform: 'translate(-50%, -50%) rotate(-90deg)',
               }}
               viewBox="0 0 38 38"
@@ -91,12 +91,12 @@ export default function Controls({
           <button
             onClick={onTogglePlay}
             disabled={disabled}
-            className="w-8 h-8 rounded-full bg-slate-950 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 flex items-center justify-center transition-colors relative z-10"
+            className="w-10 h-10 rounded-full bg-slate-950 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 flex items-center justify-center transition-colors relative z-10"
             aria-label={isPlaying ? t.playPause : t.playPause}
           >
             {isPlaying ? (
               <svg
-                className="w-3.5 h-3.5 text-white"
+                className="w-4 h-4 text-white"
                 viewBox="0 0 24 24"
                 fill="currentColor"
                 aria-hidden="true"
@@ -106,7 +106,7 @@ export default function Controls({
               </svg>
             ) : (
               <svg
-                className="w-3 h-3 text-white"
+                className="w-3.5 h-3.5 text-white"
                 viewBox="0 0 16 16"
                 fill="currentColor"
                 aria-hidden="true"
@@ -129,7 +129,7 @@ export default function Controls({
           className={btnClass}
           aria-label={t.stepForward}
         >
-          <svg className="w-4 h-4" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <svg className="w-5 h-5" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
             <path
               fillRule="evenodd"
               clipRule="evenodd"
@@ -142,8 +142,8 @@ export default function Controls({
 
       {/* Progress bar + counter */}
       <div className="flex items-center gap-3 min-w-0">
-        <div className="relative w-20 lg:w-36 group cursor-pointer shrink-0">
-          <div className="h-0.5 bg-slate-200 rounded-full overflow-hidden" aria-hidden="true">
+        <div className="relative w-28 lg:w-44 group cursor-pointer shrink-0">
+          <div className="h-1 bg-slate-200 rounded-full overflow-hidden" aria-hidden="true">
             <div
               className="h-full bg-amber-400 rounded-full transition-all duration-200"
               style={{
@@ -172,7 +172,7 @@ export default function Controls({
           />
         </div>
         <span
-          className="text-[11px] text-slate-500 font-mono tabular-nums min-w-[55px] text-right"
+          className="text-sm text-slate-500 font-mono tabular-nums min-w-[72px] text-right"
           aria-hidden="true"
         >
           {totalSteps > 0 ? `${currentStep + 1} / ${totalSteps}` : '\u2014 / \u2014'}
@@ -182,7 +182,7 @@ export default function Controls({
       {/* Speed */}
       <div className="flex items-center gap-2 shrink-0">
         <span
-          className="text-[10px] text-slate-500 uppercase tracking-wider font-medium hidden sm:inline"
+          className="text-xs text-slate-500 uppercase tracking-wider font-medium hidden sm:inline"
           id="speed-label"
         >
           {t.speed}
@@ -199,7 +199,7 @@ export default function Controls({
           aria-valuemax={5}
           aria-valuenow={speed}
           aria-valuetext={t.speedLevel.replace('{n}', String(speed))}
-          className="w-14 lg:w-16"
+          className="w-20 lg:w-24"
         />
       </div>
     </div>

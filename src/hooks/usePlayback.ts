@@ -93,8 +93,7 @@ export function usePlayback(locale: Locale, initialAlgorithm?: Algorithm | null)
       intervalRef.current = setInterval(() => {
         setCurrentStep((prev) => {
           if (prev >= steps.length - 1) {
-            setIsPlaying(false)
-            return prev
+            return 0
           }
           return prev + 1
         })

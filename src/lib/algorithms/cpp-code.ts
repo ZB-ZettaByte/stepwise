@@ -17,12 +17,94 @@ int constant_time(const vector<int>& values) {
     return values.empty() ? -1 : values[0];
 }
 
+int double_log_time(double n) {
+    int steps = 0;
+    while (n > 2) {
+        n = sqrt(n);
+        steps++;
+    }
+    return steps;
+}
+
+int binary_search_simple(const vector<int>& values, int target) {
+    int lo = 0;
+    int hi = (int)values.size() - 1;
+
+    while (lo <= hi) {
+        int mid = (lo + hi) / 2;
+        if (values[mid] == target) return mid;
+        if (values[mid] < target) lo = mid + 1;
+        else hi = mid - 1;
+    }
+
+    return -1;
+}
+
+int jump_search_simple(const vector<int>& values, int target) {
+    int n = (int)values.size();
+    int step = max(1, (int)sqrt(n));
+    int prev = 0;
+
+    while (prev < n && values[min(step, n) - 1] < target) {
+        prev = step;
+        step += max(1, (int)sqrt(n));
+    }
+
+    for (int i = prev; i < min(step, n); i++) {
+        if (values[i] == target) return i;
+    }
+    return -1;
+}
+
 int linear_time(const vector<int>& values) {
     int total = 0;
     for (int value : values) {
         total += value;
     }
     return total;
+}
+
+vector<int> sieve_near_linear(int limit) {
+    vector<bool> is_prime(limit + 1, true);
+    is_prime[0] = false;
+    is_prime[1] = false;
+
+    for (int p = 2; p * p <= limit; p++) {
+        if (!is_prime[p]) continue;
+        for (int multiple = p * p; multiple <= limit; multiple += p) {
+            is_prime[multiple] = false;
+        }
+    }
+
+    vector<int> primes;
+    for (int i = 2; i <= limit; i++) {
+        if (is_prime[i]) primes.push_back(i);
+    }
+    return primes;
+}
+
+vector<int> merge_sorted(vector<int> left, vector<int> right) {
+    vector<int> result;
+    int i = 0;
+    int j = 0;
+
+    while (i < (int)left.size() && j < (int)right.size()) {
+        if (left[i] < right[j]) result.push_back(left[i++]);
+        else result.push_back(right[j++]);
+    }
+
+    while (i < (int)left.size()) result.push_back(left[i++]);
+    while (j < (int)right.size()) result.push_back(right[j++]);
+    return result;
+}
+
+vector<int> merge_sort_simple(vector<int> values) {
+    if (values.size() <= 1) return values;
+
+    int mid = (int)values.size() / 2;
+    vector<int> left(values.begin(), values.begin() + mid);
+    vector<int> right(values.begin() + mid, values.end());
+    return merge_sorted(merge_sort_simple(left), merge_sort_simple(right));
 }
 
 int quadratic_time(const vector<int>& values) {
@@ -33,6 +115,39 @@ int quadratic_time(const vector<int>& values) {
         }
     }
     return pairs;
+}
+
+vector<vector<int>> subsets_exponential(vector<int> values) {
+    if (values.empty()) return {{}};
+
+    int first = values[0];
+    vector<int> rest_values(values.begin() + 1, values.end());
+    vector<vector<int>> rest = subsets_exponential(rest_values);
+    vector<vector<int>> result = rest;
+
+    for (vector<int> subset : rest) {
+        subset.insert(subset.begin(), first);
+        result.push_back(subset);
+    }
+
+    return result;
+}
+
+vector<vector<int>> permutations_factorial(vector<int> values) {
+    if (values.size() <= 1) return {values};
+
+    vector<vector<int>> result;
+    for (int i = 0; i < (int)values.size(); i++) {
+        vector<int> remaining = values;
+        remaining.erase(remaining.begin() + i);
+
+        for (vector<int> perm : permutations_factorial(remaining)) {
+            perm.insert(perm.begin(), values[i]);
+            result.push_back(perm);
+        }
+    }
+
+    return result;
 }`,
 
   recursion: `${commonHeaders}

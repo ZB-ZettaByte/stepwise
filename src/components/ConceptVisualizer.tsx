@@ -63,10 +63,20 @@ export default function ConceptVisualizer({ step }: ConceptVisualizerProps) {
 
 const CURVE_FNS: Record<string, (n: number) => number> = {
   'O(1)': () => 1,
+  'O(log log n)': (n) => Math.log2(Math.max(2, Math.log2(Math.max(2, n)))),
   'O(log n)': (n) => (n <= 1 ? 0 : Math.log2(n)),
+  'O(√n)': (n) => Math.sqrt(n),
   'O(n)': (n) => n,
+  'O(n log log n)': (n) => n * Math.log2(Math.max(2, Math.log2(Math.max(2, n)))),
   'O(n log n)': (n) => (n <= 1 ? 0 : n * Math.log2(n)),
   'O(n²)': (n) => n * n,
+  'O(2^n)': (n) => Math.pow(2, n),
+  'O(n!)': (n) => {
+    let result = 1
+    const whole = Math.max(1, Math.floor(n))
+    for (let i = 2; i <= whole; i++) result *= i
+    return result
+  },
 }
 
 interface BigOTooltipState {
@@ -82,6 +92,20 @@ function formatCurveValue(value: number): string {
   return d3
     .format(',.2f')(value)
     .replace(/\.?0+$/, '')
+}
+
+function getReadableSymlogTicks(maxValue: number): number[] {
+  if (maxValue <= 0) return [0]
+  const maxExponent = Math.ceil(Math.log10(maxValue))
+  const exponentStep = Math.max(1, Math.ceil(maxExponent / 4))
+  const ticks = [0, 1]
+
+  for (let exponent = exponentStep; exponent < maxExponent; exponent += exponentStep) {
+    ticks.push(10 ** exponent)
+  }
+
+  ticks.push(maxValue)
+  return ticks
 }
 
 function BigOChart({ state }: { state: BigOState }) {
@@ -129,17 +153,27 @@ function BigOChart({ state }: { state: BigOState }) {
     const margin = { top: 20, right: 24, bottom: 48, left: 62 }
     const innerWidth = size.width - margin.left - margin.right
     const innerHeight = size.height - margin.top - margin.bottom
+    const hasExplosiveCurve = renderCurves.some(
+      (curve) => curve.name === 'O(2^n)' || curve.name === 'O(n!)',
+    )
     const maxVisibleY =
-      Math.max(1, ...renderCurves.map((curve) => CURVE_FNS[curve.name](maxN))) * 1.1
+      Math.max(1, ...renderCurves.map((curve) => CURVE_FNS[curve.name](maxN))) * 1.08
     const x = d3
       .scaleLinear()
       .domain([0, maxN])
       .range([margin.left, margin.left + innerWidth])
-    const y = d3
-      .scaleLinear()
-      .domain([0, maxVisibleY])
-      .nice()
-      .range([margin.top + innerHeight, margin.top])
+    const y: d3.ScaleContinuousNumeric<number, number> = hasExplosiveCurve
+      ? d3
+          .scaleSymlog()
+          .constant(1)
+          .domain([0, maxVisibleY])
+          .nice()
+          .range([margin.top + innerHeight, margin.top])
+      : d3
+          .scaleLinear()
+          .domain([0, maxVisibleY])
+          .nice()
+          .range([margin.top + innerHeight, margin.top])
     const samples = d3.range(0, maxN + maxN / 80, maxN / 80)
     const root = svg.append('g')
 
@@ -147,7 +181,7 @@ function BigOChart({ state }: { state: BigOState }) {
       .append('g')
       .attr('aria-hidden', 'true')
       .selectAll('line')
-      .data(y.ticks(5))
+      .data(hasExplosiveCurve ? getReadableSymlogTicks(maxVisibleY) : y.ticks(5))
       .join('line')
       .attr('x1', margin.left)
       .attr('x2', margin.left + innerWidth)
@@ -178,6 +212,7 @@ function BigOChart({ state }: { state: BigOState }) {
       .call(
         d3
           .axisLeft(y)
+          .tickValues(hasExplosiveCurve ? getReadableSymlogTicks(maxVisibleY) : null)
           .ticks(5)
           .tickSizeOuter(0)
           .tickFormat((d) => formatCurveValue(Number(d))),
@@ -191,7 +226,7 @@ function BigOChart({ state }: { state: BigOState }) {
       .attr('text-anchor', 'middle')
       .attr('fill', '#475569')
       .attr('font-size', 11)
-      .attr('font-family', 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace')
+      .attr('font-family', 'Geist Sans, system-ui, sans-serif')
       .text('n (input size)')
 
     root
@@ -201,7 +236,7 @@ function BigOChart({ state }: { state: BigOState }) {
       .attr('text-anchor', 'middle')
       .attr('fill', '#475569')
       .attr('font-size', 11)
-      .attr('font-family', 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace')
+      .attr('font-family', 'Geist Sans, system-ui, sans-serif')
       .attr('transform', `rotate(-90, 14, ${margin.top + innerHeight / 2})`)
       .text(state.yLabel ?? 'operations')
 

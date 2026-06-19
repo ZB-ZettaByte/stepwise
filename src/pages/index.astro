@@ -3,7 +3,7 @@ import Layout from "@layouts/Layout.astro"
 import HeroShowcase from "@components/HeroShowcase"
 import { defaultLocale } from "@/i18n/translations"
 
-const GITHUB_URL = "https://github.com/ZB-ZettaByte"
+const GITHUB_URL = "https://github.com/ZB-ZettaByte/stepwise"
 const APP_URL = "/stepwise/app"
 
 const stats = ["45+ Algorithms", "Step by Step", "DSA Focused", "Open Source"]
@@ -29,24 +29,24 @@ const description =
 <Layout locale={defaultLocale} title={title} description={description} scrollable>
   <!-- Navbar -->
   <header class="sticky top-0 z-50 border-b border-slate-200 bg-white">
-    <nav class="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
+    <nav class="mx-auto flex h-24 max-w-[1500px] items-center justify-between px-7">
       <a
-        href="/stepwise/app"
-        class="font-heading text-lg font-semibold tracking-tight text-slate-950"
+        href="/stepwise/"
+        class="font-heading text-[1.65rem] font-semibold tracking-tight text-slate-950"
         aria-label="Stepwise — Home"
       >
         Stepwise
       </a>
 
-      <div class="flex items-center gap-1.5">
+      <div class="flex items-center gap-3">
         <a
           href={GITHUB_URL}
           target="_blank"
           rel="noopener noreferrer"
           aria-label="View Stepwise on GitHub"
-          class="press flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-950"
+          class="press flex h-12 w-12 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-950"
         >
-          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <svg class="h-6 w-6" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -57,7 +57,7 @@ const description =
 
         <a
           href={APP_URL}
-          class="press rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-900 shadow-sm hover:border-amber-400 hover:bg-amber-50 hover:text-amber-700"
+          class="press rounded-lg border border-slate-200 bg-white px-7 py-3.5 text-xl font-medium text-slate-900 shadow-sm hover:border-amber-400 hover:bg-amber-50 hover:text-amber-700"
         >
           Launch App
         </a>
@@ -67,21 +67,22 @@ const description =
 
   <main id="main-content" class="bg-white text-slate-950">
     <!-- Hero -->
-    <section class="relative mx-auto max-w-6xl px-5 pt-20 pb-16 md:pt-28 md:pb-24">
-      <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+    <section class="relative mx-auto flex min-h-[calc(100svh-6rem)] max-w-[1500px] items-center px-7 py-20 md:py-24">
+      <div class="grid w-full items-center gap-16 lg:grid-cols-[0.95fr_1.05fr] lg:gap-20 xl:gap-24">
         <div>
-          <h1 class="font-display text-4xl font-bold leading-[1.05] tracking-tight text-slate-950 sm:text-5xl md:text-6xl">
-            See Every Algorithm Run
+          <h1 class="font-display text-6xl font-bold leading-[1.02] tracking-tight text-slate-950 sm:text-7xl md:text-8xl lg:text-[7.25rem]">
+            <span class="block">See Every</span>
+            <span class="block whitespace-nowrap">Algorithm Run</span>
           </h1>
 
-          <p class="mt-6 max-w-md text-lg leading-relaxed text-slate-500">
+          <p class="mt-9 max-w-2xl text-2xl leading-relaxed text-slate-600 md:text-[1.75rem]">
             Step-by-step algorithm visualizations with real Python and C++ code
           </p>
 
-          <div class="mt-9">
+          <div class="mt-12">
             <a
               href={APP_URL}
-              class="press inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm hover:bg-amber-500"
+              class="press inline-flex items-center gap-3 rounded-lg bg-amber-400 px-8 py-4 text-xl font-semibold text-slate-950 shadow-sm hover:bg-amber-500"
             >
               Start Learning
               <span>→</span>
@@ -99,7 +100,7 @@ const description =
     <!-- Stats -->
     <section class="border-y border-slate-200 bg-slate-50">
       <div
-        class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-5 py-5 text-sm text-slate-600"
+        class="mx-auto flex max-w-[1500px] flex-wrap items-center justify-center gap-x-6 gap-y-4 px-7 py-10 text-xl text-slate-600"
       >
         {
           stats.map((stat, i) => (
@@ -113,24 +114,33 @@ const description =
     </section>
 
     <!-- Categories -->
-    <section class="mx-auto max-w-6xl px-5 py-20 text-center md:py-28">
-      <p class="mb-6 text-xs uppercase tracking-[0.2em] text-slate-500">Explore</p>
-      <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+    <section class="mx-auto grid min-h-[60svh] max-w-[1500px] items-center gap-12 px-7 py-28 md:grid-cols-[0.35fr_0.65fr] md:py-36">
+      <div>
+        <p class="text-lg uppercase tracking-[0.24em] text-amber-600">Explore</p>
+        <h2 class="mt-4 font-display text-5xl font-bold leading-tight tracking-tight text-slate-950 md:text-6xl">
+          Choose a topic
+        </h2>
+        <p class="mt-5 max-w-md text-xl leading-relaxed text-slate-500">
+          Jump into a category, then step through the first algorithm in that path.
+        </p>
+      </div>
+      <div class="grid gap-3 sm:grid-cols-2">
         {
           categories.map((cat, i) => (
-            <>
-              <a
-                href={cat.href}
-                class="text-lg text-slate-700 transition-colors duration-150 hover:text-amber-600 md:text-xl"
-              >
-                {cat.label}
-              </a>
-              {i < categories.length - 1 && (
-                <span class="text-slate-300" aria-hidden="true">
-                  ·
+            <a
+              href={cat.href}
+              class="explore-link group flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-5 py-5 text-slate-800 transition-colors duration-150 hover:border-amber-400 hover:bg-amber-50"
+            >
+              <span class="flex min-w-0 items-center gap-4">
+                <span class="font-mono text-sm text-slate-400">
+                  {String(i + 1).padStart(2, "0")}
                 </span>
-              )}
-            </>
+                <span class="truncate text-2xl font-medium md:text-3xl">{cat.label}</span>
+              </span>
+              <span class="text-2xl text-amber-500 transition-transform duration-150 group-hover:translate-x-1">
+                →
+              </span>
+            </a>
           ))
         }
       </div>
@@ -139,7 +149,7 @@ const description =
 
   <!-- Footer -->
   <footer class="border-t border-slate-200 bg-white">
-    <div class="mx-auto max-w-6xl px-5 py-8 text-center text-sm text-slate-500">
+    <div class="mx-auto max-w-[1500px] px-7 py-18 text-center text-xl text-slate-500">
       Built by Sai Rithwik Kukunuri
     </div>
   </footer>
@@ -151,6 +161,20 @@ const description =
     transition-property: color, background-color, border-color;
     transition-duration: 150ms;
     transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .explore-link {
+    transition-property: color, background-color, border-color, transform;
+    transition-duration: 160ms;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .explore-link:hover {
+    transform: translateY(-2px);
+  }
+
+  .explore-link:active {
+    transform: translateY(0) scale(0.99);
   }
 
   /* Let the hero chart render directly without an extra visual container. */
