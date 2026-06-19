@@ -1,0 +1,51 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Stepwise Algorithm Visualizer logo</title>
+  <desc id="desc">Transparent logo with cyan stepped algorithm path icon and light Stepwise wordmark.</desc>
+  <defs>
+    <linearGradient id="stepGradient" x1="74" y1="273" x2="319" y2="70" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#23F2D3"/>
+      <stop offset="0.48" stop-color="#31B7FF"/>
+      <stop offset="1" stop-color="#4C6CFF"/>
+    </linearGradient>
+    <linearGradient id="barGradient" x1="199" y1="283" x2="199" y2="119" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#24F0D2" stop-opacity="0"/>
+      <stop offset="0.55" stop-color="#32C7FF" stop-opacity="0.48"/>
+      <stop offset="1" stop-color="#69E7FF" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="accentText" x1="395" y1="263" x2="815" y2="263" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#7CEFFF"/>
+      <stop offset="1" stop-color="#5C8CFF"/>
+    </linearGradient>
+    <filter id="softGlow" x="20" y="20" width="340" height="300" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feGaussianBlur stdDeviation="6" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.12 0 0 0 0 0.86 0 0 0 0 1 0 0 0 0.35 0" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- transparent background intentionally omitted -->
+
+  <g filter="url(#softGlow)">
+    <!-- visualization bars behind the path -->
+    <rect x="156" y="231" width="18" height="52" rx="6" fill="url(#barGradient)" opacity="0.52"/>
+    <rect x="198" y="207" width="18" height="76" rx="6" fill="url(#barGradient)" opacity="0.6"/>
+    <rect x="240" y="171" width="18" height="112" rx="6" fill="url(#barGradient)" opacity="0.68"/>
+    <rect x="282" y="125" width="18" height="158" rx="6" fill="url(#barGradient)" opacity="0.76"/>
+
+    <!-- stepped algorithm path -->
+    <path d="M75 252H126C137.046 252 146 243.046 146 232V202C146 190.954 154.954 182 166 182H217C228.046 182 237 173.046 237 162V122C237 110.954 245.954 102 257 102H305"
+          stroke="url(#stepGradient)" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+
+    <!-- nodes -->
+    <circle cx="75" cy="252" r="30" fill="#08111F" stroke="url(#stepGradient)" stroke-width="18"/>
+    <circle cx="166" cy="182" r="30" fill="#08111F" stroke="url(#stepGradient)" stroke-width="18"/>
+    <circle cx="305" cy="102" r="30" fill="#08111F" stroke="url(#stepGradient)" stroke-width="18"/>
+  </g>
+
+  <!-- wordmark -->
+  <text x="395" y="170" fill="#F6FBFF" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="96" font-weight="800" letter-spacing="-3">Stepwise</text>
+  <text x="399" y="242" fill="url(#accentText)" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="34" font-weight="500" letter-spacing="10">Algorithm Visualizer</text>
+</svg>

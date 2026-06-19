@@ -1,0 +1,222 @@
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react'
+import { algorithms } from '@lib/algorithms'
+import type { Algorithm, Step } from '@lib/types'
+import type { Locale } from '@i18n/translations'
+import ArrayVisualizer from '@components/ArrayVisualizer'
+import GraphVisualizer from '@components/GraphVisualizer'
+import MatrixVisualizer from '@components/MatrixVisualizer'
+import ConceptVisualizer from '@components/ConceptVisualizer'
+
+const SHOWCASE_IDS = [
+  'bubble-sort',
+  'dijkstra',
+  'n-queens',
+  'binary-search-tree',
+  'linked-list',
+  'sliding-window',
+]
+
+const MAX_STEPS = 14
+const STEP_MS = 600
+const END_PAUSE_MS = 1200
+const FADE_MS = 400
+
+interface ShowcaseItem {
+  algorithm: Algorithm
+  steps: Step[]
+}
+
+function sampleSteps(allSteps: Step[], max: number): Step[] {
+  if (allSteps.length <= max) return allSteps
+  const result: Step[] = []
+  for (let i = 0; i < max; i++) {
+    result.push(allSteps[Math.round((i / (max - 1)) * (allSteps.length - 1))])
+  }
+  return result
+}
+
+interface AlgorithmShowcaseProps {
+  locale?: Locale
+  onSelectAlgorithm?: (algo: Algorithm) => void
+  density?: 'default' | 'landing'
+}
+
+export default function AlgorithmShowcase({
+  locale = 'en',
+  onSelectAlgorithm,
+  density = 'default',
+}: AlgorithmShowcaseProps) {
+  const items = useMemo<ShowcaseItem[]>(() => {
+    const showcaseIds = density === 'landing' ? ['bubble-sort'] : SHOWCASE_IDS
+    return showcaseIds
+      .map((id) => algorithms.find((a) => a.id === id))
+      .filter((a): a is Algorithm => a != null)
+      .map((algo) => ({
+        algorithm: algo,
+        steps: sampleSteps(algo.generateSteps(locale), MAX_STEPS),
+      }))
+  }, [locale, density])
+
+  const [algoIdx, setAlgoIdx] = useState(0)
+  const [stepIdx, setStepIdx] = useState(0)
+  const [fading, setFading] = useState(false)
+  const pausingRef = useRef(false)
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([])
+
+  // Respect the user's reduced-motion preference: pause the auto-cycling demo
+  // (WCAG 2.2.2 — give users control over moving / auto-updating content).
+  const [reducedMotion, setReducedMotion] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const handler = (e: MediaQueryListEvent) => setReducedMotion(e.matches)
+    setReducedMotion(mq.matches)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
+  }, [])
+
+  const current = items[algoIdx]
+
+  const clearTimers = useCallback(() => {
+    timersRef.current.forEach(clearTimeout)
+    timersRef.current = []
+  }, [])
+
+  useEffect(() => {
+    if (reducedMotion) return
+    pausingRef.current = false
+
+    const interval = setInterval(() => {
+      if (pausingRef.current) return
+
+      setStepIdx((prev) => {
+        if (prev + 1 >= current.steps.length) {
+          pausingRef.current = true
+          const t1 = setTimeout(() => {
+            setFading(true)
+            const t2 = setTimeout(() => {
+              setAlgoIdx((i) => (i + 1) % items.length)
+              setStepIdx(0)
+              setFading(false)
+            }, FADE_MS)
+            timersRef.current.push(t2)
+          }, END_PAUSE_MS)
+          timersRef.current.push(t1)
+          return prev
+        }
+        return prev + 1
+      })
+    }, STEP_MS)
+
+    return () => {
+      clearInterval(interval)
+      clearTimers()
+    }
+  }, [algoIdx, current.steps.length, items.length, clearTimers, reducedMotion])
+
+  const goToAlgo = useCallback(
+    (idx: number) => {
+      if (idx === algoIdx || fading) return
+      clearTimers()
+      pausingRef.current = true
+      setFading(true)
+      const t = setTimeout(() => {
+        setAlgoIdx(idx)
+        setStepIdx(0)
+        setFading(false)
+      }, FADE_MS)
+      timersRef.current.push(t)
+    },
+    [algoIdx, fading, clearTimers],
+  )
+
+  const step = current?.steps[stepIdx]
+  if (!step || !current) return null
+
+  const progress = current.steps.length > 1 ? stepIdx / (current.steps.length - 1) : 0
+  const isLanding = density === 'landing'
+
+  const renderVisualization = () => {
+    switch (current.algorithm.visualization) {
+      case 'array':
+        return <ArrayVisualizer step={step} density={density} />
+      case 'graph':
+        return <GraphVisualizer step={step} locale={locale} />
+      case 'matrix':
+        return <MatrixVisualizer step={step} />
+      case 'concept':
+        return <ConceptVisualizer step={step} />
+      default:
+        return null
+    }
+  }
+
+  return (
+    <div
+      className={`flex flex-col items-center w-full px-4 md:px-0 ${isLanding ? 'gap-0' : 'gap-3 md:gap-4'}`}
+    >
+      {/* Visualization area */}
+      <div
+        className={`relative w-full max-w-2xl transition-colors duration-300 ${
+          isLanding
+            ? 'overflow-visible'
+            : 'overflow-hidden rounded-xl border border-slate-200 bg-white group hover:border-amber-400 md:rounded-2xl'
+        }`}
+        style={{
+          height: isLanding ? 'clamp(320px, 34vw, 430px)' : 'clamp(240px, 45vw, 360px)',
+        }}
+      >
+        {/* Visualization content */}
+        <div
+          className={`absolute inset-0 flex flex-col transition-opacity ease-in-out ${isLanding ? 'p-0' : 'p-3 md:p-6'}`}
+          style={{
+            opacity: fading ? 0 : 1,
+            transitionDuration: `${FADE_MS}ms`,
+          }}
+        >
+          {renderVisualization()}
+        </div>
+
+        {/* Click target overlay */}
+        <div
+          onClick={() => onSelectAlgorithm?.(current.algorithm)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onSelectAlgorithm?.(current.algorithm)
+            }
+          }}
+          role="button"
+          tabIndex={0}
+          className="absolute inset-0 z-10 cursor-pointer focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-amber-400/30 focus-visible:ring-inset"
+          aria-label={`${current.algorithm.name} — click to explore`}
+        />
+
+        {/* Hover CTA overlay */}
+        {!isLanding && (
+          <div className="absolute inset-x-0 bottom-0 z-20 flex h-14 items-end justify-center bg-white pb-3 opacity-0 transition-opacity duration-300 pointer-events-none group-hover:opacity-100">
+            <span className="text-[11px] text-slate-500 font-mono tracking-wide">
+              {locale === 'es' ? 'Click para explorar →' : 'Click to explore →'}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {!isLanding && (
+        <div className="flex flex-col items-center gap-3">
+          <div
+            className="w-32 h-0.5 bg-slate-200 rounded-full overflow-hidden transition-opacity ease-in-out"
+            style={{ opacity: fading ? 0 : 1, transitionDuration: `${FADE_MS}ms` }}
+          >
+            <div
+              className="h-full bg-amber-400 rounded-full transition-all ease-linear"
+              style={{
+                width: `${progress * 100}%`,
+                transitionDuration: `${STEP_MS}ms`,
+              }}
+            />
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}

@@ -1,0 +1,163 @@
+---
+import Layout from "@layouts/Layout.astro"
+import HeroShowcase from "@components/HeroShowcase"
+import { defaultLocale } from "@/i18n/translations"
+
+const GITHUB_URL = "https://github.com/ZB-ZettaByte"
+const APP_URL = "/app"
+
+const stats = ["45+ Algorithms", "Step by Step", "DSA Focused", "Open Source"]
+
+// Deep-link each category to a representative algorithm (all real /[algorithm] routes).
+const categories = [
+  {label: "Concepts", href: "/big-o-notation"},
+  { label: "Data Structures", href: "/linked-list" },
+  { label: "Sorting", href: "/bubble-sort" },
+  { label: "Searching", href: "/binary-search" },
+  { label: "Graphs", href: "/bfs" },
+  { label: "Dynamic Programming", href: "/fibonacci-dp" },
+  { label: "Backtracking", href: "/n-queens" },
+  { label: "Divide and Conquer", href: "/tower-of-hanoi" },
+  { label: "Math", href: "/sieve-of-eratosthenes" },
+]
+
+const title = "Stepwise — Learn Algorithms the Way You Think"
+const description =
+  "Step-by-step visualizations for Data Structures and Algorithms Free forever."
+---
+
+<Layout locale={defaultLocale} title={title} description={description} scrollable>
+  <!-- Navbar -->
+  <header class="sticky top-0 z-50 border-b border-slate-200 bg-white">
+    <nav class="mx-auto flex h-14 max-w-6xl items-center justify-between px-5">
+      <a
+        href="/"
+        class="font-heading text-lg font-semibold tracking-tight text-slate-950"
+        aria-label="Stepwise — Home"
+      >
+        Stepwise
+      </a>
+
+      <div class="flex items-center gap-1.5">
+        <a
+          href={GITHUB_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="View Stepwise on GitHub"
+          class="press flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-950"
+        >
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0022 12.017C22 6.484 17.522 2 12 2z"
+            ></path>
+          </svg>
+        </a>
+
+        <a
+          href={APP_URL}
+          class="press rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 text-sm font-medium text-slate-900 shadow-sm hover:border-amber-400 hover:bg-amber-50 hover:text-amber-700"
+        >
+          Launch App
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main-content" class="bg-white text-slate-950">
+    <!-- Hero -->
+    <section class="relative mx-auto max-w-6xl px-5 pt-20 pb-16 md:pt-28 md:pb-24">
+      <div class="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-16">
+        <div>
+          <h1 class="font-display text-4xl font-bold leading-[1.05] tracking-tight text-slate-950 sm:text-5xl md:text-6xl">
+            See Every Algorithm Run
+          </h1>
+
+          <p class="mt-6 max-w-md text-lg leading-relaxed text-slate-500">
+            Step-by-step algorithm visualizations with real Python and C++ code
+          </p>
+
+          <div class="mt-9">
+            <a
+              href={APP_URL}
+              class="press inline-flex items-center gap-2 rounded-lg bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-950 shadow-sm hover:bg-amber-500"
+            >
+              Start Learning
+              <span>→</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Animated bar chart from the app welcome screen -->
+        <div class="landing-showcase-direct">
+          <HeroShowcase client:load />
+        </div>
+      </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="border-y border-slate-200 bg-slate-50">
+      <div
+        class="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-x-3 gap-y-2 px-5 py-5 text-sm text-slate-600"
+      >
+        {
+          stats.map((stat, i) => (
+            <>
+              <span>{stat}</span>
+              {i < stats.length - 1 && <span class="text-slate-300">·</span>}
+            </>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="mx-auto max-w-6xl px-5 py-20 text-center md:py-28">
+      <p class="mb-6 text-xs uppercase tracking-[0.2em] text-slate-500">Explore</p>
+      <div class="flex flex-wrap items-center justify-center gap-x-4 gap-y-3">
+        {
+          categories.map((cat, i) => (
+            <>
+              <a
+                href={cat.href}
+                class="text-lg text-slate-700 transition-colors duration-150 hover:text-amber-600 md:text-xl"
+              >
+                {cat.label}
+              </a>
+              {i < categories.length - 1 && (
+                <span class="text-slate-300" aria-hidden="true">
+                  ·
+                </span>
+              )}
+            </>
+          ))
+        }
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-200 bg-white">
+    <div class="mx-auto max-w-6xl px-5 py-8 text-center text-sm text-slate-500">
+      Built by Sai Rithwik Kukunuri
+    </div>
+  </footer>
+</Layout>
+
+<style>
+  /* Press feedback — buttons feel responsive to touch. */
+  .press {
+    transition-property: color, background-color, border-color;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Let the hero chart render directly without an extra visual container. */
+  .landing-showcase-direct :global(.landing-showcase > div) {
+    padding-inline: 0;
+  }
+  .landing-showcase-direct :global(.landing-showcase > div > div:first-child) {
+    max-width: none;
+  }
+</style>

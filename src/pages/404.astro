@@ -1,0 +1,57 @@
+---
+import Layout from '@layouts/Layout.astro'
+import { translations, defaultLocale, type Locale, locales } from '@i18n/translations'
+
+const pathName = Astro.url.pathname
+const maybeLocale = pathName.split('/')[1] as Locale
+const locale = locales.includes(maybeLocale) ? maybeLocale : defaultLocale
+const t = translations[locale]
+const pathnameToRedirect = locale === defaultLocale ? `/` : `/${locale}`
+---
+
+<Layout locale={locale} title={t.notFoundTitle}>
+  <div class="h-screen flex flex-col items-center justify-center gap-6 bg-white text-slate-950 px-4">
+    <div class="w-12 h-12 rounded-xl bg-slate-50 flex items-center justify-center border border-slate-200">
+      <svg
+        class="w-6 h-6 text-slate-500"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="1.5"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+        ></path>
+      </svg>
+    </div>
+
+    <div class="text-center max-w-sm">
+      <p class="text-xs text-slate-500 font-mono mb-2 tracking-widest uppercase">Error 404</p>
+      <h1 class="text-xl font-semibold text-slate-950 mb-3 font-heading">{t.notFoundTitle}</h1>
+      <p class="text-sm text-slate-600 leading-relaxed">
+        {t.notFoundDescription}
+      </p>
+    </div>
+
+    <a
+      href={pathnameToRedirect}
+      class="flex items-center gap-2 px-4 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-700 shadow-sm hover:text-amber-700 hover:bg-amber-50 hover:border-amber-300 transition-colors"
+    >
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        stroke-width="2"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+        ></path>
+      </svg>
+      {t.backToHome}
+    </a>
+  </div>
+</Layout>

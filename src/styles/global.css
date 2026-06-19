@@ -1,0 +1,112 @@
+@import 'tailwindcss';
+
+/* Geist Mono — variable weight, for the code editor */
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Geist Pixel Circle — for headings / titles */
+@font-face {
+  font-family: 'Geist Pixel Circle';
+  src: url('/fonts/GeistPixel-Circle.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Geist Pixel Square — for body text */
+@font-face {
+  font-family: 'Geist Pixel Square';
+  src: url('/fonts/GeistPixel-Square.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@theme {
+  --font-sans: 'Geist Pixel Square', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, monospace;
+  --font-heading: 'Geist Pixel Circle', system-ui, sans-serif;
+  --font-display:
+    'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+  --color-bg: #ffffff;
+  --color-bg-deep: #ffffff;
+  --color-surface: #f8fafc;
+  --color-surface-strong: #f1f5f9;
+  --color-border: rgba(15, 23, 42, 0.12);
+  --color-border-strong: rgba(245, 158, 11, 0.45);
+  --color-text: #020617;
+  --color-muted: #475569;
+  --color-faint: #94a3b8;
+  --color-primary: #fbbf24;
+  --color-primary-strong: #f59e0b;
+  --color-secondary: #d4d4d4;
+  --color-accent: #fbbf24;
+  --color-success: #fbbf24;
+  --color-danger: #f87171;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+/* Monaco Editor – active line decoration */
+.algoviz-active-line {
+  background: #fff7ed !important;
+  outline: 1px solid rgba(251, 191, 36, 0.28);
+  outline-offset: -1px;
+}
+
+/* Circle indicator next to line number */
+.algoviz-active-line-gutter {
+  background: transparent !important;
+  width: 8px !important;
+  margin-left: 2px !important;
+  position: relative;
+}
+.algoviz-active-line-gutter::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+/* Monaco Editor – inline variable annotations */
+.algoviz-inline-vars {
+  color: rgba(71, 85, 105, 0.62) !important;
+  font-style: italic !important;
+  font-size: 12px !important;
+  padding-left: 16px !important;
+  pointer-events: none;
+}
+
+/* Hide native search clear button */
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Countdown ring on play button */
+@keyframes step-countdown {
+  from {
+    stroke-dashoffset: 106.81;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
